@@ -171,7 +171,7 @@ select:focus { outline: none; }
   cursor: pointer; user-select: none; transition: all .15s;
 }
 .resp-card.selected { border-color: var(--blue); background: rgba(45,0,196,0.06); }
-.resp-card-icon { font-size: 28px; line-height: 1; }
+.resp-card-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .resp-card-name { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 14px; line-height: 24px; letter-spacing: .1px; color: var(--text-primary); }
 .resp-card-px   { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--pink); }
 .resp-card:not(.selected) .resp-card-px { color: var(--text-muted); }
@@ -468,17 +468,35 @@ select:focus { outline: none; }
         <div class="resp-label">RESPONSIVENESS CHECKS</div>
         <div class="resp-grid">
           <div class="resp-card selected" data-bp="mobile" onclick="toggleBP(this)">
-            <div class="resp-card-icon">📱</div>
+            <div class="resp-card-icon" style="width:30px;height:31px;position:relative;flex-shrink:0">
+              <div style="position:absolute;top:15.01%;right:38.58%;bottom:21.47%;left:0"><img alt="" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;display:block" src="https://www.figma.com/api/mcp/asset/fca81304-2bfc-448e-8c13-0c3a1846d301"/></div>
+              <div style="position:absolute;top:36.03%;right:1.47%;bottom:1.69%;left:32.19%"><div style="position:absolute;inset:-2.37% -2.3%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/09926781-1c84-4edc-96a8-3dac33cdb624"/></div></div>
+              <div style="position:absolute;top:28.19%;right:52.07%;bottom:51.56%;left:24.7%"><div style="position:absolute;inset:-8.09% -7.3% -8.09% -7.29%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/aff8f833-8be5-439c-a473-fcc07478e920"/></div></div>
+              <div style="position:absolute;top:1.7%;right:36.13%;bottom:1.69%;left:8.13%"><div style="position:absolute;inset:-1.7% -3.04%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/449c905d-ace0-4c8b-8a3b-0ea6a097d2fe"/></div></div>
+              <div style="position:absolute;top:88.96%;right:58.73%;bottom:11.04%;left:30.73%"><div style="position:absolute;inset:-0.51px -16.07%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/0f3e69b4-f59a-4809-88a1-7390a900845b"/></div></div>
+            </div>
             <div class="resp-card-name">Mobile</div>
             <div class="resp-card-px">375px</div>
           </div>
           <div class="resp-card selected" data-bp="tablet" onclick="toggleBP(this)">
-            <div class="resp-card-icon">💻</div>
+            <div class="resp-card-icon" style="width:28px;height:29px;position:relative;flex-shrink:0">
+              <div style="position:absolute;top:25.78%;right:0;bottom:8.99%;left:32.46%"><img alt="" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;display:block" src="https://www.figma.com/api/mcp/asset/8f6e47a8-f1b9-4da1-9ab9-d385d41c6cda"/></div>
+              <div style="position:absolute;top:1.55%;right:5.05%;bottom:1.56%;left:1.61%"><div style="position:absolute;inset:-1.61% -1.74% -1.61% -1.73%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/66fbc6a3-1d33-479a-ab8b-4b4f40801c89"/></div></div>
+            </div>
             <div class="resp-card-name">Tablet</div>
             <div class="resp-card-px">768px</div>
           </div>
           <div class="resp-card selected" data-bp="desktop" onclick="toggleBP(this)">
-            <div class="resp-card-icon">🖥</div>
+            <div class="resp-card-icon" style="width:27px;height:27px;position:relative;flex-shrink:0">
+              <div style="position:absolute;top:22.66%;right:15.76%;bottom:5.92%;left:12.83%"><img alt="" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;display:block" src="https://www.figma.com/api/mcp/asset/01b00882-6682-4e5b-a253-ba8531f406c2"/></div>
+              <div style="position:absolute;top:84.27%;right:32.86%;bottom:1.71%;left:32.86%"><div style="position:absolute;inset:-12.22% -5%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/d7ae0d27-2dbd-4263-84ab-56f09111c1d6"/></div></div>
+              <div style="position:absolute;top:14.17%;right:1.71%;bottom:15.73%;left:93.61%"><div style="position:absolute;inset:-2.44% -36.64%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/8d209038-f72d-436a-a099-ba08117bf311"/></div></div>
+              <div style="position:absolute;top:14.17%;right:35.98%;bottom:15.73%;left:1.71%"><div style="position:absolute;inset:-2.44% -2.75%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/ec085a47-ca5a-4990-882d-1c820306a53e"/></div></div>
+              <div style="position:absolute;top:71.81%;right:51.56%;bottom:28.19%;left:1.71%"><div style="position:absolute;inset:-0.46px -3.66%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/4432b074-c5e9-4cf9-b3a8-dded8dc70fea"/></div></div>
+              <div style="position:absolute;top:71.81%;right:1.71%;bottom:28.19%;left:87.39%"><div style="position:absolute;inset:-0.46px -15.71%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/595ff9a3-ae6d-44d3-b5af-12d539bb6c93"/></div></div>
+              <div style="position:absolute;top:46.88%;right:7.95%;bottom:1.72%;left:48.44%"><div style="position:absolute;inset:-3.33% -3.93%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/122ccf6d-86be-4c2a-ac9b-daf56f19d3a3"/></div></div>
+              <div style="position:absolute;top:26.63%;right:26.64%;bottom:62.46%;left:26.63%"><div style="position:absolute;inset:-15.71% -3.66%"><img alt="" style="display:block;width:100%;height:100%;max-width:none" src="https://www.figma.com/api/mcp/asset/de9e0078-725d-4e8a-a6ec-e29f43154696"/></div></div>
+            </div>
             <div class="resp-card-name">Desktop</div>
             <div class="resp-card-px">1440px</div>
           </div>
