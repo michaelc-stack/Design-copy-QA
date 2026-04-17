@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Design QA Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Roboto:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-page:       #f6f6f6;
+  --bg-card:       #ffffff;
+  --bg-input:      #ffffff;
+  --bg-tab-off:    #f5f5f3;
+  --bg-score:      #f6f6f6;
+  --text-primary:  #1a1a19;
+  --text-body:     #000000;
+  --text-muted:    rgba(0,0,0,0.4);
+  --border:        rgba(0,0,0,0.12);
+  --border-mid:    rgba(0,0,0,0.2);
+  --border-bp:     rgba(0,0,0,0.4);
+  --shadow-card:   0 9px 12px rgba(0,0,0,0.02);
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --blue:          #2D00C4;
+  --pink:          #F1025D;
+  --green:         #54C656;
+  --error:         #B00020;
+  --orange:        #F25140;
+  --yellow:        #FEB028;
+  --btn-dark:      #2c2c2a;
+  --btn-text:      #f1efe8;
+}
+html.dark {
+  --bg-page:    #1c1c1a;
+  --bg-card:    #252523;
+  --bg-input:   #1c1c1a;
+  --bg-tab-off: #2c2c2a;
+  --bg-score:   #2c2c2a;
+  --text-primary: #f1efe8;
+  --text-body:  #f1efe8;
+  --text-muted: rgba(255,255,255,0.4);
+  --border:     rgba(255,255,255,0.1);
+  --border-mid: rgba(255,255,255,0.2);
+  --border-bp:  rgba(255,255,255,0.35);
+  --shadow-card: 0 9px 12px rgba(0,0,0,0.15);
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── BLACK LOGO BANNER ── */
+.nav-banner {
+  background: #000;
+  width: 100%;
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.nav-banner-logo {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.3em;
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+.nav-banner-logo .logo-d {
+  border-bottom: 2px solid #fff;
+  padding-bottom: 1px;
+  margin-right: -1px;
+}
+
+.page-body { padding: 80px 290px; }
+@media(max-width:1100px){ .page-body{ padding: 48px 40px; } .nav-banner{ padding: 30px 40px; } }
+@media(max-width:600px){  .page-body{ padding: 32px 16px; } .nav-banner{ padding: 24px 16px; } }
+
+.wrap { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+.hidden { display: none !important; }
+
+/* ── APP HEADER ── */
+.app-header { display: flex; align-items: flex-start; justify-content: space-between; }
+.header-left { display: flex; flex-direction: column; gap: 8px; }
+.app-title { font-family: 'Lato', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.1; color: var(--text-primary); }
+.app-sub   { font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; letter-spacing: .5px; color: var(--text-body); }
+
+.theme-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; margin-top: 6px; flex-shrink: 0; }
+.toggle-track { width: 36px; height: 20px; border-radius: 20px; position: relative; flex-shrink: 0; background: #c8c8c6; border: 0.5px solid var(--border-mid); transition: background .2s; }
+html.dark .toggle-track { background: #444441; }
+.toggle-thumb { width: 14px; height: 14px; border-radius: 50%; background: #888; position: absolute; top: 3px; left: 3px; transition: transform .2s, background .2s; }
+html.dark .toggle-thumb { transform: translateX(15px); background: #f1efe8; }
+.toggle-label { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-body); }
+
+/* ── NAV TABS ── */
+.nav-tabs { display: flex; border-bottom: 0.5px solid var(--border); }
+.nav-tab {
+  padding: 10px 18px; font-family: 'Roboto', sans-serif; font-weight: 500;
+  font-size: 14px; line-height: 16px; letter-spacing: 1.25px; text-transform: uppercase;
+  color: var(--text-body); cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: all .15s; user-select: none;
+}
+.nav-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); font-weight: 700; }
+
+/* ── USERNAME ── */
+.username-row { display: flex; align-items: center; gap: 12px; }
+.input-username { width: 280px !important; flex-shrink: 0; }
+
+/* ── INPUTS ── */
+input[type=text], input[type=url] {
+  width: 100%; height: 36px; padding: 0 12px;
+  background: var(--bg-input); border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; letter-spacing: .5px;
+  color: var(--text-primary); transition: border-color .15s;
+}
+input::placeholder { color: var(--text-muted); }
+input:focus { outline: none; border-color: var(--border-mid); }
+select {
+  width: 100%; height: 36px; padding: 0 12px;
+  background: var(--bg-input); border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-muted); cursor: pointer;
+}
+select:focus { outline: none; }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  padding: 30px 20px; box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+/* ── ROW HEAD ── */
+.row-head { display: flex; align-items: center; gap: 8px; }
+.badge {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--blue); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 24px; color: #fff; letter-spacing: .18px;
+}
+.row-head-title { font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 20px; line-height: 24px; letter-spacing: .15px; color: var(--text-primary); }
+
+/* ── SRC TABS ── */
+.tab-row { display: flex; gap: 6px; }
+.src-tab {
+  padding: 6px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--border);
+  background: var(--bg-tab-off); cursor: pointer; user-select: none; transition: all .15s;
+  font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: .4px; color: var(--text-body);
+}
+.src-tab.active { background: var(--bg-card); border-color: var(--border-mid); font-weight: 700; color: var(--text-primary); }
+
+/* ── DROP ZONE ── */
+.drop-zone {
+  border: 1.5px dashed var(--border-mid); border-radius: var(--radius-md);
+  background: var(--bg-tab-off); width: 100%; height: 96px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  cursor: pointer; position: relative; overflow: hidden; transition: all .15s;
+}
+.drop-zone:hover { border-color: var(--border-bp); }
+.drop-zone.has-img { border-style: solid; border-color: var(--blue); background: var(--bg-card); }
+.drop-zone img { max-height: 80px; max-width: 100%; object-fit: contain; border-radius: 6px; }
+.drop-txt  { font-family: 'Roboto', sans-serif; font-size: 12px; letter-spacing: .4px; color: var(--text-body); }
+.drop-hint { font-family: 'Roboto', sans-serif; font-size: 12px; letter-spacing: .4px; color: var(--text-muted); }
+.upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+/* ── URL GROUP ── */
+.url-group { display: flex; flex-direction: column; gap: 6px; }
+.url-label { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 16px; line-height: 24px; letter-spacing: .5px; color: var(--text-primary); }
+.url-hint  { font-family: 'Roboto', sans-serif; font-size: 12px; line-height: 16px; letter-spacing: .4px; color: var(--text-body); }
+
+/* ── RESPONSIVENESS ── */
+.resp-section { display: flex; flex-direction: column; gap: 8px; }
+.resp-label { font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 14px; line-height: 24px; letter-spacing: .1px; color: var(--text-body); }
+.resp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.resp-card {
+  background: var(--bg-score); border: 0.5px solid var(--border-bp); border-radius: var(--radius-sm);
+  padding: 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  cursor: pointer; user-select: none; transition: all .15s;
+}
+.resp-card.selected { border-color: var(--blue); background: rgba(45,0,196,0.06); }
+.resp-card-icon { font-size: 28px; line-height: 1; }
+.resp-card-name { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 14px; line-height: 24px; letter-spacing: .1px; color: var(--text-primary); }
+.resp-card-px   { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--pink); }
+.resp-card:not(.selected) .resp-card-px { color: var(--text-muted); }
+
+/* ── RUN BUTTON ── */
+.run-btn {
+  width: 100%; height: 48px; background: var(--btn-dark); border-radius: var(--radius-md);
+  border: none; color: var(--btn-text);
+  font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity .15s;
+}
+.run-btn:hover   { opacity: .88; }
+.run-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── DIVIDER ── */
+.divider { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; }
+.divider-line { width: 1px; height: 14px; background: var(--border); }
+.divider-pill {
+  background: var(--bg-tab-off); border: 0.5px solid var(--border); border-radius: 20px;
+  padding: 3px 12px;
+  font-family: 'Roboto', sans-serif; font-size: 14px; line-height: 20px; letter-spacing: .25px; color: var(--text-body);
+}
+
+/* ── REPORT ── */
+.report-header { display: flex; justify-content: space-between; align-items: center; }
+.report-title  { font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 20px; line-height: 24px; letter-spacing: .15px; color: var(--text-primary); }
+.report-meta   { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-body); white-space: pre; }
+
+.score-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.score-card { background: var(--bg-score); border-radius: var(--radius-sm); height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.score-num  { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 24px; }
+.score-lbl  { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text-body); }
+.col-green  { color: var(--green); }
+.col-red    { color: var(--error); }
+.col-orange { color: var(--orange); }
+.col-yellow { color: var(--yellow); }
+
+.section-label { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; color: var(--text-body); }
+
+.resp-result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.resp-result-card { background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-sm); height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+.resp-result-name   { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; color: var(--text-primary); }
+.resp-result-status { font-family: 'Inter', sans-serif; font-size: 11px; }
+
+.issues-list { display: flex; flex-direction: column; gap: 8px; }
+.issue-row {
+  background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 12px 16px; display: flex; gap: 12px; align-items: flex-start;
+}
+.sev-badge { border-radius: 20px; padding: 3px 8px; flex-shrink: 0; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: #fff; }
+.sev-critical { background: var(--error); }
+.sev-medium   { background: var(--orange); }
+.sev-minor    { background: var(--yellow); }
+.issue-content { display: flex; flex-direction: column; gap: 3px; }
+.issue-section { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text-body); }
+.issue-desc    { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-primary); }
+
+/* ── HISTORY ── */
+.history-header { display: flex; justify-content: space-between; align-items: center; }
+.history-list   { display: flex; flex-direction: column; gap: 8px; }
+.history-row {
+  background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  height: 56px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; transition: border-color .15s;
+}
+.history-row:hover { border-color: var(--border-mid); }
+.history-left   { display: flex; align-items: center; gap: 12px; }
+.history-avatar { width: 32px; height: 32px; border-radius: 16px; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; color: #fff; }
+.history-meta   { display: flex; flex-direction: column; gap: 2px; }
+.history-namerow { display: flex; align-items: center; gap: 6px; }
+.history-name   { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; color: var(--text-primary); }
+.history-score  { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-body); }
+.history-time   { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--text-body); }
+.history-badge  { border-radius: 20px; padding: 3px 9px; flex-shrink: 0; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; color: #fff; }
+.hb-fail { background: var(--error); }
+.hb-pass { background: var(--green); }
+
+/* ── COMPARE ── */
+.compare-title   { display: flex; flex-direction: column; gap: 4px; }
+.compare-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.compare-select-group { display: flex; flex-direction: column; gap: 6px; }
+.diff-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.diff-panel { background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; display: flex; flex-direction: column; }
+.diff-panel-title { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; color: var(--text-body); margin-bottom: 4px; white-space: pre; }
+.diff-stat { display: flex; justify-content: space-between; align-items: center; height: 34px; font-family: 'Inter', sans-serif; font-size: 13px; border-bottom: 0.5px solid var(--border); }
+.diff-stat:last-child { border-bottom: none; }
+.diff-stat-lbl { color: var(--text-body); }
+.diff-better { color: var(--green); }
+.diff-worse  { color: var(--error); }
+.diff-same   { color: var(--text-primary); }
+
+.empty-state { text-align: center; padding: 3rem 2rem; font-family: 'Roboto', sans-serif; font-size: 14px; color: var(--text-muted); }
+
+@media(max-width:700px) {
+  .score-row, .resp-grid, .resp-result-grid { grid-template-columns: 1fr 1fr; }
+  .diff-panels, .compare-selects { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- BLACK LOGO BANNER -->
+<nav class="nav-banner">
+  <span class="nav-banner-logo">
+    <span class="logo-d">D</span>AUNTLESS
+  </span>
+</nav>
+
+<div class="page-body">
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="header-left">
+      <div class="app-title">Design QA</div>
+      <div class="app-sub">Compare source design vs build — get a structured discrepancy report</div>
+    </div>
+    <div class="theme-toggle" onclick="toggleTheme()">
+      <span style="font-family:'Inter',sans-serif;font-size:14px" id="theme-icon">☀</span>
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      <span class="toggle-label" id="theme-label">Light</span>
+    </div>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('check')">QA Check</div>
+    <div class="nav-tab" onclick="switchTab('history')">History</div>
+    <div class="nav-tab" onclick="switchTab('compare')">Compare runs</div>
+  </div>
+
+  <!-- QA CHECK -->
+  <div id="tab-check">
+    <div class="username-row" style="margin-bottom:0">
+      <input type="text" id="qa-username" class="input-username" placeholder="Your QA username (e.g. sara_design)"/>
+      <span style="font-family:'Roboto',sans-serif;font-size:16px;letter-spacing:.5px">Checking as this user</span>
+    </div>
+
+    <!-- Card A -->
+    <div class="card" style="margin-top:40px">
+      <div class="row-head">
+        <div class="badge">A</div>
+        <span class="row-head-title">SOURCE — DESIGN OR ORIGINAL</span>
+      </div>
+      <div class="tab-row">
+        <div class="src-tab active" id="a-tab-screen" onclick="switchSource('a','screen')">Screenshot</div>
+        <div class="src-tab" id="a-tab-url" onclick="switchSource('a','url')">Live URL</div>
+        <div class="src-tab" id="a-tab-figma" onclick="switchSource('a','figma')">Figma frame</div>
+      </div>
+      <div id="a-screen-zone">
+        <div class="drop-zone" id="a-drop" onclick="document.getElementById('a-file').click()">
+          <input type="file" id="a-file" class="upload-input" accept="image/*" onchange="handleFile('a',this)"/>
+          <span class="drop-txt">Drop screenshot here or <u style="cursor:pointer">browse</u></span>
+          <span class="drop-hint">PNG, JPG, WebP</span>
+        </div>
+      </div>
+      <div id="a-url-zone" class="hidden url-group">
+        <span class="url-label">Live URL</span>
+        <input type="url" id="a-url-val" placeholder="https://yoursite.com/page"/>
+      </div>
+      <div id="a-figma-zone" class="hidden url-group">
+        <span class="url-label">Figma frame link</span>
+        <input type="url" id="a-figma-val" placeholder="https://figma.com/file/..."/>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-pill">compared against</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Card B -->
+    <div class="card">
+      <div class="row-head">
+        <div class="badge">B</div>
+        <span class="row-head-title">BUILD — STAGING OR NEW VERSION</span>
+      </div>
+      <div class="tab-row">
+        <div class="src-tab" id="b-tab-screen" onclick="switchSource('b','screen')">Screenshot</div>
+        <div class="src-tab active" id="b-tab-url" onclick="switchSource('b','url')">Live URL</div>
+      </div>
+      <div id="b-url-zone">
+        <div class="url-group">
+          <span class="url-label">Staging or build URL</span>
+          <input type="url" id="b-url-val" placeholder="https://staging.yoursite.com/page"/>
+          <span class="url-hint">If this page is behind a password, use screenshot upload instead</span>
+        </div>
+      </div>
+      <div id="b-screen-zone" class="hidden">
+        <div class="drop-zone" id="b-drop" onclick="document.getElementById('b-file').click()">
+          <input type="file" id="b-file" class="upload-input" accept="image/*" onchange="handleFile('b',this)"/>
+          <span class="drop-txt">Drop screenshot here or <u style="cursor:pointer">browse</u></span>
+          <span class="drop-hint">PNG, JPG, WebP</span>
+        </div>
+      </div>
+      <div class="resp-section">
+        <div class="resp-label">RESPONSIVENESS CHECKS</div>
+        <div class="resp-grid">
+          <div class="resp-card selected" data-bp="mobile" onclick="toggleBP(this)">
+            <div class="resp-card-icon">📱</div>
+            <div class="resp-card-name">Mobile</div>
+            <div class="resp-card-px">375px</div>
+          </div>
+          <div class="resp-card selected" data-bp="tablet" onclick="toggleBP(this)">
+            <div class="resp-card-icon">💻</div>
+            <div class="resp-card-name">Tablet</div>
+            <div class="resp-card-px">768px</div>
+          </div>
+          <div class="resp-card selected" data-bp="desktop" onclick="toggleBP(this)">
+            <div class="resp-card-icon">🖥</div>
+            <div class="resp-card-name">Desktop</div>
+            <div class="resp-card-px">1440px</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="run-btn" id="run-btn" onclick="runQA()">Run QA check →</button>
+    <div id="report-area"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="tab-history" class="hidden">
+    <div class="history-header">
+      <span style="font-family:'Roboto',sans-serif;font-weight:500;font-size:20px;line-height:24px;letter-spacing:.15px;color:var(--text-primary)">QA run history</span>
+      <span style="font-family:'Inter',sans-serif;font-size:12px" id="history-count">0 runs</span>
+    </div>
+    <div id="history-list-wrap" style="margin-top:0">
+      <div class="empty-state">No QA runs yet. Run your first check to see history here.</div>
+    </div>
+  </div>
+
+  <!-- COMPARE -->
+  <div id="tab-compare" class="hidden">
+    <div class="compare-title">
+      <span style="font-family:'Roboto',sans-serif;font-weight:500;font-size:20px;line-height:24px;letter-spacing:.15px;color:var(--text-primary)">Compare two runs</span>
+      <span style="font-family:'Inter',sans-serif;font-size:12px">See how QA scores and issues changed between runs</span>
+    </div>
+    <div class="compare-selects" style="margin-top:0">
+      <div class="compare-select-group">
+        <div class="section-label">RUN A (EARLIER)</div>
+        <select id="cmp-a"><option value="">Select a run…</option></select>
+      </div>
+      <div class="compare-select-group">
+        <div class="section-label">RUN B (NEWER)</div>
+        <select id="cmp-b"><option value="">Select a run…</option></select>
+      </div>
+    </div>
+    <button class="run-btn" onclick="runComparison()">Compare runs →</button>
+    <div id="compare-result"></div>
+  </div>
+
+</div>
+<script>
+// Theme
+(function(){
+  var s=localStorage.getItem('qa_theme');
+  var pd=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
+  if(s?s==='dark':pd) document.documentElement.classList.add('dark');
+  window.addEventListener('DOMContentLoaded',syncToggleUI);
+})();
+function toggleTheme(){
+  var d=document.documentElement.classList.toggle('dark');
+  localStorage.setItem('qa_theme',d?'dark':'light');
+  syncToggleUI();
+}
+function syncToggleUI(){
+  var d=document.documentElement.classList.contains('dark');
+  var i=document.getElementById('theme-icon');
+  var l=document.getElementById('theme-label');
+  if(!i)return;
+  i.textContent=d?'🌙':'☀';
+  l.textContent=d?'Dark':'Light';
+}
+
+// State
+var state={aMode:'screen',bMode:'url',aImg:null,bImg:null,activeBPs:{mobile:true,tablet:true,desktop:true},history:[]};
+try{var sv=localStorage.getItem('design_qa_history');if(sv)state.history=JSON.parse(sv);}catch(e){}
+function save(){try{localStorage.setItem('design_qa_history',JSON.stringify(state.history));}catch(e){}}
+
+// Tabs
+function switchTab(t){
+  ['check','history','compare'].forEach(function(x){
+    document.getElementById('tab-'+x).classList.toggle('hidden',x!==t);
+  });
+  document.querySelectorAll('.nav-tab').forEach(function(el,i){
+    el.classList.toggle('active',['check','history','compare'][i]===t);
+  });
+  if(t==='history')renderHistory();
+  if(t==='compare')populateCompare();
+}
+
+function switchSource(side,mode){
+  if(side==='a'){
+    state.aMode=mode;
+    ['screen','url','figma'].forEach(function(m){
+      document.getElementById('a-tab-'+m).classList.toggle('active',m===mode);
+      document.getElementById('a-'+m+'-zone').classList.toggle('hidden',m!==mode);
+    });
+  } else {
+    state.bMode=mode;
+    ['screen','url'].forEach(function(m){
+      document.getElementById('b-tab-'+m).classList.toggle('active',m===mode);
+      document.getElementById('b-'+m+'-zone').classList.toggle('hidden',m!==mode);
+    });
+  }
+}
+
+function handleFile(side,input){
+  var f=input.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var dz=document.getElementById(side+'-drop');
+    dz.classList.add('has-img');
+    dz.innerHTML='<img src="'+e.target.result+'" alt="Uploaded"/>';
+    state[side+'Img']=e.target.result;
+  };
+  r.readAsDataURL(f);
+}
+
+function toggleBP(el){
+  var bp=el.dataset.bp;
+  state.activeBPs[bp]=!state.activeBPs[bp];
+  el.classList.toggle('selected',state.activeBPs[bp]);
+}
+
+function srcDesc(){
+  if(state.aMode==='screen')return state.aImg?'Screenshot (uploaded)':'Screenshot (none)';
+  if(state.aMode==='url')return document.getElementById('a-url-val').value||'URL (empty)';
+  return document.getElementById('a-figma-val').value||'Figma (empty)';
+}
+function buildDesc(){
+  if(state.bMode==='url')return document.getElementById('b-url-val').value||'URL (empty)';
+  return state.bImg?'Screenshot (uploaded)':'Screenshot (none)';
+}
+
+var pool=[
+  {section:'Header',    sev:'high',desc:'Logo size differs — source is 48px, build renders at 36px'},
+  {section:'Navigation',sev:'med', desc:'Nav link spacing is 24px in source, 16px in build'},
+  {section:'Hero',      sev:'high',desc:'Headline font weight is 700 in design, 400 in build'},
+  {section:'Hero',      sev:'med', desc:'CTA button colour differs between source and build'},
+  {section:'Cards',     sev:'low', desc:'Card border radius differs — 12px in source vs 8px in build'},
+  {section:'Footer',    sev:'low', desc:'Footer link colour contrast is slightly off (4.2:1 vs 4.5:1)'},
+  {section:'Typography',sev:'high',desc:'Body copy line-height set to 1.4 in build, should be 1.7'},
+  {section:'Spacing',   sev:'med', desc:'Section vertical padding is 64px in source, 48px in build'},
+  {section:'Images',    sev:'med', desc:'Hero image appears cropped at mobile — object-fit issue'},
+  {section:'Forms',     sev:'low', desc:'Input placeholder colour is too light — fails AA contrast'},
+  {section:'Responsive',sev:'high',desc:'Nav collapses to hamburger at wrong breakpoint (900px vs 768px)'},
+  {section:'Responsive',sev:'med', desc:'Cards break at 480px instead of stacking gracefully'},
+  {section:'Colours',   sev:'low', desc:'Brand accent slightly off from design spec'},
+  {section:'Icons',     sev:'low', desc:'Icon sizes inconsistent — mix of 16px and 20px in same row'},
+  {section:'Buttons',   sev:'med', desc:'Secondary button border missing in build'},
+  {section:'Animation', sev:'low', desc:'Hover transition 300ms in build, should be 150ms'},
+];
+
+function genReport(){
+  var sh=pool.slice().sort(function(){return Math.random()-.5;});
+  var issues=sh.slice(0,4+Math.floor(Math.random()*5));
+  var h=issues.filter(function(i){return i.sev==='high';}).length;
+  var m=issues.filter(function(i){return i.sev==='med';}).length;
+  var l=issues.filter(function(i){return i.sev==='low';}).length;
+  var bp={};
+  ['mobile','tablet','desktop'].forEach(function(b){
+    if(state.activeBPs[b]){var r=Math.random();bp[b]=r>.6?'pass':r>.3?'warn':'fail';}
+  });
+  return{issues:issues,high:h,med:m,low:l,bpResults:bp,score:Math.max(0,Math.round(100-h*15-m*7-l*3))};
+}
+
+function runQA(){
+  var user=document.getElementById('qa-username').value.trim();
+  if(!user){alert('Please enter your QA username first.');return;}
+  var btn=document.getElementById('run-btn');
+  btn.disabled=true;btn.textContent='Running checks…';
+  setTimeout(function(){
+    var r=genReport();
+    r.user=user;r.source=srcDesc();r.build=buildDesc();
+    r.timestamp=new Date().toISOString();r.id=Date.now();
+    state.history.unshift(r);
+    if(state.history.length>30)state.history.pop();
+    save();
+    renderReport(r,document.getElementById('report-area'));
+    btn.disabled=false;btn.textContent='Run QA check →';
+    document.getElementById('report-area').scrollIntoView({behavior:'smooth',block:'start'});
+  },1200);
+}
+
+function renderReport(r,container){
+  var bpMap={mobile:'📱 Mobile 375px',tablet:'💻 Tablet 768px',desktop:'🖥 Desktop 1440px'};
+  var bpC={pass:'col-green',warn:'col-yellow',fail:'col-red'};
+  var bpL={pass:'Passed',warn:'Minor issues',fail:'Layout broken'};
+  var bpH='';
+  Object.keys(r.bpResults||{}).forEach(function(b){
+    var s=r.bpResults[b];
+    bpH+='<div class="resp-result-card"><div class="resp-result-name">'+bpMap[b]+'</div><div class="resp-result-status '+bpC[s]+'">'+bpL[s]+'</div></div>';
+  });
+  var sc={high:'sev-critical',med:'sev-medium',low:'sev-minor'};
+  var sl={high:'Critical',med:'Medium',low:'Minor'};
+  var iH=r.issues.map(function(i){
+    return '<div class="issue-row"><span class="sev-badge '+sc[i.sev]+'">'+sl[i.sev]+'</span><div class="issue-content"><div class="issue-section">'+i.section+'</div><div class="issue-desc">'+i.desc+'</div></div></div>';
+  }).join('');
+  var nc=r.score>=80?'col-green':r.score>=60?'col-yellow':'col-red';
+  var ts=new Date(r.timestamp).toLocaleString();
+  container.innerHTML='<div class="card" style="gap:20px;margin-top:0">'
+    +'<div class="report-header"><span class="report-title">QA report</span><span class="report-meta">'+ts+'  ·  '+r.user+'</span></div>'
+    +'<div class="score-row">'
+    +'<div class="score-card"><div class="score-num '+nc+'">'+r.score+'</div><div class="score-lbl">Overall score</div></div>'
+    +'<div class="score-card"><div class="score-num col-red">'+r.high+'</div><div class="score-lbl">Critical</div></div>'
+    +'<div class="score-card"><div class="score-num col-orange">'+r.med+'</div><div class="score-lbl">Medium</div></div>'
+    +'<div class="score-card"><div class="score-num col-yellow">'+r.low+'</div><div class="score-lbl">Minor</div></div>'
+    +'</div>'
+    +(bpH?'<div class="section-label">RESPONSIVENESS</div><div class="resp-result-grid">'+bpH+'</div>':'')
+    +'<div class="section-label">ISSUES FOUND ('+r.issues.length+')</div>'
+    +'<div class="issues-list">'+iH+'</div>'
+    +'</div>';
+}
+
+function renderHistory(){
+  var w=document.getElementById('history-list-wrap');
+  document.getElementById('history-count').textContent=state.history.length+' run'+(state.history.length!==1?'s':'');
+  if(!state.history.length){w.innerHTML='<div class="empty-state">No QA runs yet.</div>';return;}
+  var items=state.history.map(function(r,i){
+    var init=r.user.slice(0,2).toUpperCase();
+    var ts=new Date(r.timestamp).toLocaleString();
+    var bc=r.high>0?'hb-fail':'hb-pass';
+    var bt=r.high>0?r.high+' critical':'Passed';
+    return '<div class="history-row" onclick="viewRun('+i+')">'
+      +'<div class="history-left"><div class="history-avatar">'+init+'</div>'
+      +'<div class="history-meta"><div class="history-namerow"><span class="history-name">'+r.user+'</span><span class="history-score">· score '+r.score+'</span></div>'
+      +'<div class="history-time">'+ts+'  ·  '+r.source+'</div></div></div>'
+      +'<span class="history-badge '+bc+'">'+bt+'</span></div>';
+  }).join('');
+  w.innerHTML='<div class="history-list">'+items+'</div>';
+}
+
+function viewRun(i){
+  var r=state.history[i];
+  switchTab('check');
+  var a=document.getElementById('report-area');
+  renderReport(r,a);
+  setTimeout(function(){a.scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+
+function populateCompare(){
+  var opts=state.history.map(function(r,i){
+    return '<option value="'+i+'">'+r.user+' — '+new Date(r.timestamp).toLocaleString()+' (score '+r.score+')</option>';
+  }).join('');
+  if(!opts)opts='<option value="">No runs yet</option>';
+  document.getElementById('cmp-a').innerHTML='<option value="">Select a run…</option>'+opts;
+  document.getElementById('cmp-b').innerHTML='<option value="">Select a run…</option>'+opts;
+  if(state.history.length>=2){document.getElementById('cmp-a').value='1';document.getElementById('cmp-b').value='0';}
+}
+
+function runComparison(){
+  var ai=document.getElementById('cmp-a').value;
+  var bi=document.getElementById('cmp-b').value;
+  if(ai===''||bi===''||ai===bi){alert('Please select two different runs.');return;}
+  var a=state.history[parseInt(ai)];
+  var b=state.history[parseInt(bi)];
+  function dc(v,inv){if(v===0)return'diff-same';return((v<0&&inv)||(v>0&&!inv))?'diff-better':'diff-worse';}
+  function ar(v,inv){if(v===0)return' (no change)';return(v>0?'+':'')+v+' '+(((v>0&&!inv)||(v<0&&inv))?'↑':'↓');}
+  var sd=b.score-a.score,hd=b.high-a.high,md=b.med-a.med,ld=b.low-a.low;
+  document.getElementById('compare-result').innerHTML=
+    '<div class="card" style="margin-top:0">'
+    +'<div style="font-family:\'Roboto\',sans-serif;font-weight:500;font-size:20px;line-height:24px;letter-spacing:.15px;color:var(--text-primary)">Comparing · '+new Date(a.timestamp).toLocaleDateString()+' vs '+new Date(b.timestamp).toLocaleDateString()+'</div>'
+    +'<div class="diff-panels">'
+    +'<div class="diff-panel"><div class="diff-panel-title">Earlier  ·  '+a.user+'</div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Score</span><span class="diff-same">'+a.score+'</span></div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Critical</span><span class="diff-same">'+a.high+'</span></div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Medium</span><span class="diff-same">'+a.med+'</span></div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Minor</span><span class="diff-same">'+a.low+'</span></div>'
+    +'</div>'
+    +'<div class="diff-panel"><div class="diff-panel-title">Newer  ·  '+b.user+'</div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Score</span><span class="'+dc(sd,false)+'">'+b.score+ar(sd,false)+'</span></div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Critical</span><span class="'+dc(hd,true)+'">'+b.high+ar(hd,true)+'</span></div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Medium</span><span class="'+dc(md,true)+'">'+b.med+ar(md,true)+'</span></div>'
+    +'<div class="diff-stat"><span class="diff-stat-lbl">Minor</span><span class="'+dc(ld,true)+'">'+b.low+ar(ld,true)+'</span></div>'
+    +'</div></div></div>';
+}
+</script>
+</div><!-- /page-body -->
+</body>
+</html>
