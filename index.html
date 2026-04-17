@@ -393,6 +393,7 @@ select:focus { outline: none; }
   <!-- NAV TABS -->
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('check')">QA Check</div>
+    <div class="nav-tab" onclick="switchTab('resp')">Responsiveness</div>
     <div class="nav-tab" onclick="switchTab('history')">History</div>
     <div class="nav-tab" onclick="switchTab('compare')">Compare runs</div>
     <div class="nav-tab" onclick="switchTab('a11y')">Accessibility</div>
@@ -464,36 +465,57 @@ select:focus { outline: none; }
           <span class="drop-hint">PNG, JPG, WebP</span>
         </div>
       </div>
+    </div>
+
+    <button class="run-btn" id="run-btn" onclick="runQA()" style="margin-top:16px">Run QA check →</button>
+    <div id="report-area"></div>
+  </div>
+
+  <!-- RESPONSIVENESS -->
+  <div id="tab-resp" class="hidden">
+    <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:0">
+      <span style="font-family:'Roboto',sans-serif;font-weight:500;font-size:20px;line-height:24px;letter-spacing:.15px;color:var(--text-primary)">Responsiveness checks</span>
+      <span style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text-body)">Select breakpoints to test and enter the URL of your build</span>
+    </div>
+
+    <div class="card" style="margin-top:0">
+      <div class="url-group">
+        <span class="url-label">URL to test</span>
+        <input type="url" id="resp-url" placeholder="https://staging.yoursite.com/page"/>
+        <span class="url-hint">Enter the staging or live URL you want to check across breakpoints</span>
+      </div>
+
       <div class="resp-section">
-        <div class="resp-label">RESPONSIVENESS CHECKS</div>
+        <div class="resp-label">SELECT BREAKPOINTS</div>
         <div class="resp-grid">
-          <div class="resp-card selected" data-bp="mobile" onclick="toggleBP(this)">
+          <div class="resp-card selected" data-bp="mobile" onclick="toggleBPTab(this)">
             <div class="resp-card-icon">
-              <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_mob)"><path opacity="0.2" d="M9.23018 24.4119C14.3279 24.4119 18.4604 19.9916 18.4604 14.5389C18.4604 9.08628 14.3279 4.66602 9.23018 4.66602C4.13249 4.66602 0 9.08628 0 14.5389C0 19.9916 4.13249 24.4119 9.23018 24.4119Z" fill="url(#pg_mob0)"/><path d="M21.1247 30.56L20.8418 30.1025L17.8395 29.1412C17.7076 29.0994 17.5795 29.0448 17.457 28.978C16.2554 28.3076 15.2207 27.2375 14.4812 26.0433L12.2107 22.3779C11.8205 21.7477 11.5563 21.1955 12.1687 20.7592C12.7811 20.3229 14.3895 20.7249 14.7797 21.3504L16.5483 24.2071L9.86613 13.3658C9.68855 13.0501 9.63177 12.6733 9.70762 12.3139C9.78347 11.9546 9.9861 11.6404 10.2732 11.4369C10.5604 11.2335 10.9099 11.1565 11.2488 11.222C11.5878 11.2875 11.89 11.4904 12.0924 11.7884L16.4135 18.8201L15.8077 17.8446C15.6301 17.529 15.5734 17.1522 15.6492 16.7928C15.7251 16.4334 15.9277 16.1193 16.2148 15.9158C16.502 15.7124 16.8515 15.6354 17.1904 15.7009C17.5293 15.7664 17.8316 15.9693 18.034 16.2673L18.9338 17.7205L18.6022 17.1837C18.4246 16.868 18.3678 16.4912 18.4437 16.1318C18.5195 15.7725 18.7222 15.4583 19.0093 15.2549C19.2965 15.0514 19.6459 14.9744 19.9849 15.0399C20.3238 15.1054 20.626 15.3083 20.8285 15.6064L21.7504 17.095L21.3967 16.5215C21.2137 16.2059 21.1529 15.8265 21.227 15.4638C21.3012 15.101 21.5045 14.7834 21.7939 14.5783C22.0833 14.3731 22.436 14.2966 22.7772 14.3649C23.1185 14.4333 23.4214 14.641 23.6219 14.9442L26.5147 19.604C27.6124 21.3776 28.3939 23.7779 28.1949 25.9203C28.1242 26.6558 27.9407 27.4326 28.3298 28.0971L29.6143 30.56" stroke="url(#pg_mob1)" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.32916 15.0597C7.7665 14.3774 7.42383 13.6207 7.42383 12.6381C7.42413 11.739 7.71668 10.868 8.25137 10.1742C8.78606 9.48038 9.52962 9.00702 10.3547 8.83515C11.1798 8.66328 12.0351 8.80359 12.7741 9.23206C13.5131 9.66053 14.0899 10.3505 14.4056 11.1838" stroke="#111111" stroke-width="1.01864" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.2171 30.56H4.25402C4.01615 30.56 3.78061 30.5098 3.56086 30.4124C3.3411 30.315 3.14145 30.1723 2.9733 29.9923C2.80515 29.8123 2.6718 29.5987 2.58087 29.3636C2.48994 29.1285 2.44321 28.8765 2.44336 28.622V2.46528C2.44321 2.21084 2.48994 1.95887 2.58087 1.72375C2.6718 1.48864 2.80515 1.27499 2.9733 1.09502C3.14145 0.915054 3.3411 0.772288 3.56086 0.674883C3.78061 0.577478 4.01615 0.527344 4.25402 0.527344H17.3874C17.8679 0.527344 18.3287 0.731518 18.6685 1.09495C19.0083 1.45838 19.1992 1.9513 19.1992 2.46528V11.1842" stroke="#111111" stroke-width="1.01864" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.23535 27.6543H12.4057" stroke="#111111" stroke-width="1.01864" stroke-linecap="round" stroke-linejoin="round"/></g><defs><linearGradient id="pg_mob0" x1="9.23018" y1="4.66602" x2="9.23018" y2="24.4119" gradientUnits="userSpaceOnUse"><stop stop-color="#F1025D"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><linearGradient id="pg_mob1" x1="19.6445" y1="11.1992" x2="19.6445" y2="30.56" gradientUnits="userSpaceOnUse"><stop stop-color="#F1025D"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><clipPath id="clip_mob"><rect width="30.0572" height="31.0861" fill="white"/></clipPath></defs></svg>
+              <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_mob2)"><path opacity="0.2" d="M9.23018 24.4119C14.3279 24.4119 18.4604 19.9916 18.4604 14.5389C18.4604 9.08628 14.3279 4.66602 9.23018 4.66602C4.13249 4.66602 0 9.08628 0 14.5389C0 19.9916 4.13249 24.4119 9.23018 24.4119Z" fill="url(#pg_mob2a)"/><path d="M21.1247 30.56L20.8418 30.1025L17.8395 29.1412C17.7076 29.0994 17.5795 29.0448 17.457 28.978C16.2554 28.3076 15.2207 27.2375 14.4812 26.0433L12.2107 22.3779C11.8205 21.7477 11.5563 21.1955 12.1687 20.7592C12.7811 20.3229 14.3895 20.7249 14.7797 21.3504L16.5483 24.2071L9.86613 13.3658C9.68855 13.0501 9.63177 12.6733 9.70762 12.3139C9.78347 11.9546 9.9861 11.6404 10.2732 11.4369C10.5604 11.2335 10.9099 11.1565 11.2488 11.222C11.5878 11.2875 11.89 11.4904 12.0924 11.7884L16.4135 18.8201L15.8077 17.8446C15.6301 17.529 15.5734 17.1522 15.6492 16.7928C15.7251 16.4334 15.9277 16.1193 16.2148 15.9158C16.502 15.7124 16.8515 15.6354 17.1904 15.7009C17.5293 15.7664 17.8316 15.9693 18.034 16.2673L18.9338 17.7205L18.6022 17.1837C18.4246 16.868 18.3678 16.4912 18.4437 16.1318C18.5195 15.7725 18.7222 15.4583 19.0093 15.2549C19.2965 15.0514 19.6459 14.9744 19.9849 15.0399C20.3238 15.1054 20.626 15.3083 20.8285 15.6064L21.7504 17.095L21.3967 16.5215C21.2137 16.2059 21.1529 15.8265 21.227 15.4638C21.3012 15.101 21.5045 14.7834 21.7939 14.5783C22.0833 14.3731 22.436 14.2966 22.7772 14.3649C23.1185 14.4333 23.4214 14.641 23.6219 14.9442L26.5147 19.604C27.6124 21.3776 28.3939 23.7779 28.1949 25.9203C28.1242 26.6558 27.9407 27.4326 28.3298 28.0971L29.6143 30.56" stroke="url(#pg_mob2b)" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.32916 15.0597C7.7665 14.3774 7.42383 13.6207 7.42383 12.6381C7.42413 11.739 7.71668 10.868 8.25137 10.1742C8.78606 9.48038 9.52962 9.00702 10.3547 8.83515C11.1798 8.66328 12.0351 8.80359 12.7741 9.23206C13.5131 9.66053 14.0899 10.3505 14.4056 11.1838" stroke="#111111" stroke-width="1.01864" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.2171 30.56H4.25402C4.01615 30.56 3.78061 30.5098 3.56086 30.4124C3.3411 30.315 3.14145 30.1723 2.9733 29.9923C2.80515 29.8123 2.6718 29.5987 2.58087 29.3636C2.48994 29.1285 2.44321 28.8765 2.44336 28.622V2.46528C2.44321 2.21084 2.48994 1.95887 2.58087 1.72375C2.6718 1.48864 2.80515 1.27499 2.9733 1.09502C3.14145 0.915054 3.3411 0.772288 3.56086 0.674883C3.78061 0.577478 4.01615 0.527344 4.25402 0.527344H17.3874C17.8679 0.527344 18.3287 0.731518 18.6685 1.09495C19.0083 1.45838 19.1992 1.9513 19.1992 2.46528V11.1842" stroke="#111111" stroke-width="1.01864" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.23535 27.6543H12.4057" stroke="#111111" stroke-width="1.01864" stroke-linecap="round" stroke-linejoin="round"/></g><defs><linearGradient id="pg_mob2a" x1="9.23018" y1="4.66602" x2="9.23018" y2="24.4119" gradientUnits="userSpaceOnUse"><stop stop-color="#F1025D"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><linearGradient id="pg_mob2b" x1="19.6445" y1="11.1992" x2="19.6445" y2="30.56" gradientUnits="userSpaceOnUse"><stop stop-color="#F1025D"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><clipPath id="clip_mob2"><rect width="30.0572" height="31.0861" fill="white"/></clipPath></defs></svg>
             </div>
             <div class="resp-card-name">Mobile</div>
             <div class="resp-card-px">375px</div>
           </div>
-          <div class="resp-card selected" data-bp="tablet" onclick="toggleBP(this)">
+          <div class="resp-card selected" data-bp="tablet" onclick="toggleBPTab(this)">
             <div class="resp-card-icon">
-              <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_tab)"><path opacity="0.2" d="M18.721 26.6353C23.9931 26.6353 28.2671 22.3613 28.2671 17.0891C28.2671 11.8169 23.9931 7.54297 18.721 7.54297C13.4488 7.54297 9.1748 11.8169 9.1748 17.0891C9.1748 22.3613 13.4488 26.6353 18.721 26.6353Z" fill="url(#pg_tab0)"/><path d="M18.7481 21.948V26.9783C18.7481 27.4634 18.5554 27.9287 18.2123 28.2718C17.8693 28.6148 17.404 28.8075 16.9189 28.8075H2.28526C1.80012 28.8075 1.33486 28.6148 0.991816 28.2718C0.648774 27.9287 0.456055 27.4634 0.456055 26.9783V17.375" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M0.457031 16.9179V2.28428C0.457031 1.79915 0.64975 1.33388 0.992792 0.990839C1.33583 0.647797 1.8011 0.455078 2.28623 0.455078H12.3468" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M10.5168 3.20117H3.20117V19.6628" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M3.20117 20.1211V23.3222H16.0044V22.8649" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M8.23145 26.0645H10.9741" stroke="black" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.8575 11.0158L12.8418 13.3937L9.27373 14.8719C9.11745 14.9365 8.94997 14.9697 8.78085 14.9696C8.61174 14.9694 8.44432 14.936 8.28814 14.8711C8.13197 14.8062 7.99011 14.7112 7.87066 14.5915C7.75122 14.4718 7.65653 14.3297 7.59201 14.1734L6.36073 11.201C6.23007 10.8855 6.23002 10.531 6.36057 10.2154C6.49112 9.89989 6.74159 9.64907 7.05697 9.5181L10.6251 8.04102L10.872 8.63551" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.8418 13.3946C12.8418 13.3946 19.2817 12.121 22.7698 13.8119L17.3496 0.728516C16.2064 4.6876 10.625 8.04532 10.625 8.04532" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.1055 4.96628C19.6706 4.88717 20.246 4.99797 20.7414 5.28128C21.2367 5.56459 21.624 6.00438 21.8423 6.5316C22.0607 7.05882 22.0977 7.64363 21.9477 8.19421C21.7977 8.74479 21.4692 9.22997 21.0136 9.57359" stroke="#F1025D" stroke-width="0.914601" stroke-linejoin="round"/><path d="M8.97656 14.9962L13.4352 20.421C13.5668 20.5809 13.7463 20.6942 13.9472 20.7442C14.1482 20.7943 14.3599 20.7783 14.5511 20.6988L17.1611 19.6184C17.3178 19.5518 17.4417 19.426 17.506 19.2684C17.5702 19.1107 17.5695 18.9341 17.5041 18.777L17.2914 18.2636C17.188 18.015 17.0241 17.7961 16.8147 17.6268L14.5476 15.7908C14.1883 15.5014 13.8839 15.1498 13.649 14.7527L12.8488 13.3945" stroke="#F1025D" stroke-width="0.914601" stroke-linejoin="round"/><path d="M23.627 5.79127L25.4116 5.05273" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.0537 9.33984L26.8383 10.0784" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.1289 2.27485L22.8674 0.490234" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/></g><defs><linearGradient id="pg_tab0" x1="9.1748" y1="17.0891" x2="28.2671" y2="17.0891" gradientUnits="userSpaceOnUse"><stop offset="0.01" stop-color="#F1025D"/><stop offset="0.35" stop-color="#E00B8C"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><clipPath id="clip_tab"><rect width="28.2669" height="29.2649" fill="white"/></clipPath></defs></svg>
+              <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_tab2)"><path opacity="0.2" d="M18.721 26.6353C23.9931 26.6353 28.2671 22.3613 28.2671 17.0891C28.2671 11.8169 23.9931 7.54297 18.721 7.54297C13.4488 7.54297 9.1748 11.8169 9.1748 17.0891C9.1748 22.3613 13.4488 26.6353 18.721 26.6353Z" fill="url(#pg_tab2)"/><path d="M18.7481 21.948V26.9783C18.7481 27.4634 18.5554 27.9287 18.2123 28.2718C17.8693 28.6148 17.404 28.8075 16.9189 28.8075H2.28526C1.80012 28.8075 1.33486 28.6148 0.991816 28.2718C0.648774 27.9287 0.456055 27.4634 0.456055 26.9783V17.375" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M0.457031 16.9179V2.28428C0.457031 1.79915 0.64975 1.33388 0.992792 0.990839C1.33583 0.647797 1.8011 0.455078 2.28623 0.455078H12.3468" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M10.5168 3.20117H3.20117V19.6628" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M3.20117 20.1211V23.3222H16.0044V22.8649" stroke="black" stroke-width="0.914601" stroke-linecap="square" stroke-linejoin="round"/><path d="M8.23145 26.0645H10.9741" stroke="black" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.8575 11.0158L12.8418 13.3937L9.27373 14.8719C8.94997 14.9697 8.78085 14.9696 8.28814 14.8711C8.13197 14.8062 7.99011 14.7112 7.87066 14.5915C7.75122 14.4718 7.65653 14.3297 7.59201 14.1734L6.36073 11.201C6.23007 10.8855 6.23002 10.531 6.36057 10.2154C6.49112 9.89989 6.74159 9.64907 7.05697 9.5181L10.6251 8.04102L10.872 8.63551" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.8418 13.3946C12.8418 13.3946 19.2817 12.121 22.7698 13.8119L17.3496 0.728516C16.2064 4.6876 10.625 8.04532 10.625 8.04532" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.1055 4.96628C19.6706 4.88717 20.246 4.99797 20.7414 5.28128C21.2367 5.56459 21.624 6.00438 21.8423 6.5316C22.0607 7.05882 22.0977 7.64363 21.9477 8.19421C21.7977 8.74479 21.4692 9.22997 21.0136 9.57359" stroke="#F1025D" stroke-width="0.914601" stroke-linejoin="round"/><path d="M8.97656 14.9962L13.4352 20.421C13.5668 20.5809 13.7463 20.6942 13.9472 20.7442C14.1482 20.7943 14.3599 20.7783 14.5511 20.6988L17.1611 19.6184C17.3178 19.5518 17.4417 19.426 17.506 19.2684C17.5702 19.1107 17.5695 18.9341 17.5041 18.777L17.2914 18.2636C17.188 18.015 17.0241 17.7961 16.8147 17.6268L14.5476 15.7908C14.1883 15.5014 13.8839 15.1498 13.649 14.7527L12.8488 13.3945" stroke="#F1025D" stroke-width="0.914601" stroke-linejoin="round"/><path d="M23.627 5.79127L25.4116 5.05273" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.0537 9.33984L26.8383 10.0784" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.1289 2.27485L22.8674 0.490234" stroke="#F1025D" stroke-width="0.914601" stroke-linecap="round" stroke-linejoin="round"/></g><defs><linearGradient id="pg_tab2" x1="9.1748" y1="17.0891" x2="28.2671" y2="17.0891" gradientUnits="userSpaceOnUse"><stop offset="0.01" stop-color="#F1025D"/><stop offset="0.35" stop-color="#E00B8C"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><clipPath id="clip_tab2"><rect width="28.2669" height="29.2649" fill="white"/></clipPath></defs></svg>
             </div>
             <div class="resp-card-name">Tablet</div>
             <div class="resp-card-px">768px</div>
           </div>
-          <div class="resp-card selected" data-bp="desktop" onclick="toggleBP(this)">
+          <div class="resp-card selected" data-bp="desktop" onclick="toggleBPTab(this)">
             <div class="resp-card-icon">
-              <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_desk)"><path opacity="0.2" d="M12.9758 25.1509C18.248 25.1509 22.522 20.8769 22.522 15.6047C22.522 10.3326 18.248 6.05859 12.9758 6.05859C7.70364 6.05859 3.42969 10.3326 3.42969 15.6047C3.42969 20.8769 7.70364 25.1509 12.9758 25.1509Z" fill="url(#pg_desk0)"/><path d="M10.0357 24.195V24.5106C10.0357 24.6747 10.0035 24.8372 9.94069 24.9888C9.87792 25.1404 9.78589 25.2782 9.66987 25.3943L8.78613 26.2769H17.9493L17.0656 25.3943C16.9495 25.2782 16.8575 25.1404 16.7947 24.9888C16.732 24.8372 16.6997 24.6747 16.6997 24.5106V22.5293" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.0273 22.5292C25.3588 22.5292 25.6766 22.3976 25.9109 22.1632C26.1453 21.9289 26.2769 21.6111 26.2769 21.2797V5.03864C26.2769 4.70723 26.1453 4.38939 25.9109 4.15505C25.6766 3.92071 25.3588 3.78906 25.0273 3.78906" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.7066 3.78906C1.3752 3.78906 1.05736 3.92071 0.823023 4.15505C0.588683 4.38939 0.457031 4.70723 0.457031 5.03864V21.2797C0.457031 21.6111 0.588683 21.9289 0.823023 22.1632C1.05736 22.3976 1.3752 22.5292 1.7066 22.5292H17.1153" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.9505 19.1973H0.457031" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.2776 19.1973H23.3623" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.9512 12.5352L14.0247 16.1284L21.7439 25.6734C21.8778 25.8403 22.0437 25.9788 22.2317 26.0808C22.4198 26.1828 22.6263 26.2463 22.8392 26.2676C23.0521 26.2889 23.2671 26.2676 23.4716 26.2048C23.6761 26.142 23.8661 26.0391 24.0304 25.9021C24.3582 25.6289 24.5641 25.2368 24.6029 24.8119C24.6417 24.387 24.5102 23.9641 24.2373 23.6361L16.5238 14.4627L12.9512 12.5352Z" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.6611 24.3324L21.8272 23.3789" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M23.3617 16.6981V0.873175C23.3617 0.757807 23.3073 0.647226 23.2115 0.565397C23.1157 0.483569 22.9861 0.437012 22.8508 0.437012H3.84082C3.7055 0.437012 3.57591 0.483569 3.48011 0.565397C3.38431 0.647226 3.32984 0.757807 3.32984 0.873175V16.6981" stroke="#F1025D" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.37305 4.62305H23.3628" stroke="#F1025D" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.4541 2.54102H6.28753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M7.53711 2.54102H8.3694" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M9.61914 2.54102H10.4526" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M19.6136 7.12109H7.12012V10.0364H19.6136V7.12109Z" stroke="#F1025D" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.7041 12.5352H7.53753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M6.7041 14.2012H7.53753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M6.7041 15.8652H7.53753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M8.37012 15.8652H9.20355" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M10.0352 15.8652H10.8686" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M10.0352 14.2012H10.8686" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M8.37012 12.5352H9.20355" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M10.0352 12.5352H10.8686" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/></g><defs><linearGradient id="pg_desk0" x1="12.9758" y1="6.05859" x2="12.9758" y2="25.1509" gradientUnits="userSpaceOnUse"><stop stop-color="#F1025D"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><clipPath id="clip_desk"><rect width="26.7349" height="26.7349" fill="white"/></clipPath></defs></svg>
+              <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip_desk2)"><path opacity="0.2" d="M12.9758 25.1509C18.248 25.1509 22.522 20.8769 22.522 15.6047C22.522 10.3326 18.248 6.05859 12.9758 6.05859C7.70364 6.05859 3.42969 10.3326 3.42969 15.6047C3.42969 20.8769 7.70364 25.1509 12.9758 25.1509Z" fill="url(#pg_desk2)"/><path d="M10.0357 24.195V24.5106C10.0357 24.6747 10.0035 24.8372 9.94069 24.9888C9.87792 25.1404 9.78589 25.2782 9.66987 25.3943L8.78613 26.2769H17.9493L17.0656 25.3943C16.9495 25.2782 16.8575 25.1404 16.7947 24.9888C16.732 24.8372 16.6997 24.6747 16.6997 24.5106V22.5293" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.0273 22.5292C25.3588 22.5292 25.6766 22.3976 25.9109 22.1632C26.1453 21.9289 26.2769 21.6111 26.2769 21.2797V5.03864C26.2769 4.70723 26.1453 4.38939 25.9109 4.15505C25.6766 3.92071 25.3588 3.78906 25.0273 3.78906" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.7066 3.78906C1.3752 3.78906 1.05736 3.92071 0.823023 4.15505C0.588683 4.38939 0.457031 4.70723 0.457031 5.03864V21.2797C0.457031 21.6111 0.588683 21.9289 0.823023 22.1632C1.05736 22.3976 1.3752 22.5292 1.7066 22.5292H17.1153" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.9505 19.1973H0.457031" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.2776 19.1973H23.3623" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.9512 12.5352L14.0247 16.1284L21.7439 25.6734C21.8778 25.8403 22.0437 25.9788 22.2317 26.0808C22.4198 26.1828 22.6263 26.2463 22.8392 26.2676C23.0521 26.2889 23.2671 26.2676 23.4716 26.2048C23.6761 26.142 23.8661 26.0391 24.0304 25.9021C24.3582 25.6289 24.5641 25.2368 24.6029 24.8119C24.6417 24.387 24.5102 23.9641 24.2373 23.6361L16.5238 14.4627L12.9512 12.5352Z" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.6611 24.3324L21.8272 23.3789" stroke="#111111" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M23.3617 16.6981V0.873175C23.3617 0.757807 23.3073 0.647226 23.2115 0.565397C23.1157 0.483569 22.9861 0.437012 22.8508 0.437012H3.84082C3.7055 0.437012 3.57591 0.483569 3.48011 0.565397C3.38431 0.647226 3.32984 0.757807 3.32984 0.873175V16.6981" stroke="#F1025D" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.37305 4.62305H23.3628" stroke="#F1025D" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.4541 2.54102H6.28753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M7.53711 2.54102H8.3694" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M9.61914 2.54102H10.4526" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M19.6136 7.12109H7.12012V10.0364H19.6136V7.12109Z" stroke="#F1025D" stroke-width="0.915744" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.7041 12.5352H7.53753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M6.7041 14.2012H7.53753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M6.7041 15.8652H7.53753" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M8.37012 15.8652H9.20355" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M10.0352 15.8652H10.8686" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M10.0352 14.2012H10.8686" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M8.37012 12.5352H9.20355" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/><path d="M10.0352 12.5352H10.8686" stroke="#F1025D" stroke-width="0.915744" stroke-linejoin="round"/></g><defs><linearGradient id="pg_desk2" x1="12.9758" y1="6.05859" x2="12.9758" y2="25.1509" gradientUnits="userSpaceOnUse"><stop stop-color="#F1025D"/><stop offset="1" stop-color="#BB1DF0"/></linearGradient><clipPath id="clip_desk2"><rect width="26.7349" height="26.7349" fill="white"/></clipPath></defs></svg>
             </div>
             <div class="resp-card-name">Desktop</div>
             <div class="resp-card-px">1440px</div>
           </div>
         </div>
       </div>
+
+      <button class="run-btn" id="resp-btn" onclick="runResp()" style="margin-top:0">Run responsiveness check →</button>
     </div>
 
-    <button class="run-btn" id="run-btn" onclick="runQA()" style="margin-top:16px">Run QA check →</button>
-    <div id="report-area"></div>
+    <div id="resp-result"></div>
   </div>
 
   <!-- HISTORY -->
@@ -597,14 +619,86 @@ function save(){try{localStorage.setItem('design_qa_history',JSON.stringify(stat
 
 // Tabs
 function switchTab(t){
-  ['check','history','compare','a11y'].forEach(function(x){
+  ['check','resp','history','compare','a11y'].forEach(function(x){
     document.getElementById('tab-'+x).classList.toggle('hidden',x!==t);
   });
   document.querySelectorAll('.nav-tab').forEach(function(el,i){
-    el.classList.toggle('active',['check','history','compare','a11y'][i]===t);
+    el.classList.toggle('active',['check','resp','history','compare','a11y'][i]===t);
   });
   if(t==='history')renderHistory();
   if(t==='compare')populateCompare();
+}
+
+function toggleBPTab(el){
+  var bp=el.dataset.bp;
+  state.activeBPs[bp]=!state.activeBPs[bp];
+  el.classList.toggle('selected',state.activeBPs[bp]);
+}
+
+var respIssueBank={
+  mobile:[
+    {sev:'high',title:'Nav overflows viewport',desc:'Horizontal scrollbar appears at 375px — navigation items exceed screen width.'},
+    {sev:'high',title:'Hero text truncated',desc:'H1 text is clipped by overflow:hidden at 375px. Reduce font-size or allow wrapping.'},
+    {sev:'med', title:'CTA button below fold',desc:'Primary call-to-action button is not visible without scrolling on iPhone SE.'},
+    {sev:'low', title:'Touch targets too small',desc:'Icon links in the footer are 28×28px. Minimum recommended size is 44×44px.'},
+    {sev:'pass', title:'Images scale correctly',desc:'All images use max-width:100% and render without overflow at 375px.'},
+  ],
+  tablet:[
+    {sev:'high',title:'Two-column grid breaks at 768px',desc:'Cards collapse to 1 column unexpectedly — the breakpoint fires at 768px but layout needs adjustment.'},
+    {sev:'med', title:'Sidebar overlaps content',desc:'Side navigation overlaps main content area between 768–900px.'},
+    {sev:'low', title:'Font size too large at 768px',desc:'H2 heading is 42px on tablet — visually dominant; consider scaling to 32px.'},
+    {sev:'pass', title:'Form inputs full-width',desc:'All form fields correctly expand to full width on tablet breakpoint.'},
+  ],
+  desktop:[
+    {sev:'med', title:'Max-width not applied',desc:'Content stretches to full viewport width on large screens (>1440px). Add max-width and auto margins.'},
+    {sev:'low', title:'Hover states missing on cards',desc:'Card hover effect defined in Figma is absent in the build at desktop breakpoint.'},
+    {sev:'pass', title:'3-column grid renders correctly',desc:'Feature grid correctly displays 3 columns at 1440px with consistent gutters.'},
+    {sev:'pass', title:'Navigation fully visible',desc:'All nav items render in a single row without wrapping at 1440px.'},
+  ],
+};
+
+function runResp(){
+  var url=document.getElementById('resp-url').value.trim();
+  if(!url){alert('Please enter a URL to test.');return;}
+  var btn=document.getElementById('resp-btn');
+  btn.disabled=true;btn.textContent='Checking breakpoints…';
+  setTimeout(function(){
+    var bps=Object.keys(state.activeBPs).filter(function(k){return state.activeBPs[k];});
+    if(!bps.length){alert('Please select at least one breakpoint.');btn.disabled=false;btn.textContent='Run responsiveness check →';return;}
+    var bpMeta={mobile:{w:375,icon:'📱',label:'Mobile'},tablet:{w:768,icon:'💻',label:'Tablet'},desktop:{w:1440,icon:'🖥',label:'Desktop'}};
+    var totalFail=0,totalPass=0;
+    var html='<div style="display:flex;flex-direction:column;gap:16px;margin-top:0">';
+    bps.forEach(function(bp){
+      var meta=bpMeta[bp];
+      var pool=(respIssueBank[bp]||[]).slice().sort(function(){return Math.random()-.5;});
+      var issues=pool.slice(0,2+Math.floor(Math.random()*2));
+      var passes=pool.filter(function(i){return i.pass;});
+      var fails=issues.filter(function(i){return !i.pass;});
+      totalFail+=fails.length;totalPass+=passes.length;
+      var sevCls={high:'sev-critical',med:'sev-medium',low:'sev-minor'};
+      var sevLbl={high:'Critical',med:'Medium',low:'Minor'};
+      var issHtml=issues.map(function(i){
+        if(i.pass) return '<div class="a11y-issue"><div class="a11y-issue-icon" style="color:var(--green)">✓</div><div class="a11y-issue-body"><div class="a11y-issue-title">'+i.title+'</div><div class="a11y-issue-desc">'+i.desc+'</div></div></div>';
+        return '<div class="a11y-issue"><div class="a11y-issue-icon" style="color:var(--error)">✕</div><div class="a11y-issue-body"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px"><div class="a11y-issue-title">'+i.title+'</div><span class="a11y-sev-tag '+sevCls[i.sev]+'">'+sevLbl[i.sev]+'</span></div><div class="a11y-issue-desc">'+i.desc+'</div></div></div>';
+      }).join('');
+      var pillCls=fails.length===0?'a11y-pass-pill':fails.length>=2?'a11y-fail-pill':'a11y-warn-pill';
+      var pillTxt=fails.length===0?'All passed':fails.length+' issue'+(fails.length!==1?'s':'');
+      html+='<div class="card" style="gap:12px;margin-top:0">'
+        +'<div class="a11y-section-hd" style="border-top:none;padding-top:0">'
+        +'<span style="display:flex;align-items:center;gap:10px">'
+        +'<span style="font-size:22px">'+meta.icon+'</span>'
+        +'<span class="a11y-section-title">'+meta.label+' — '+meta.w+'px</span>'
+        +'</span>'
+        +'<span class="'+pillCls+'">'+pillTxt+'</span>'
+        +'</div>'
+        +'<div class="a11y-issue-list">'+issHtml+'</div>'
+        +'</div>';
+    });
+    html+='</div>';
+    document.getElementById('resp-result').innerHTML=html;
+    btn.disabled=false;btn.textContent='Run responsiveness check →';
+    document.getElementById('resp-result').scrollIntoView({behavior:'smooth',block:'start'});
+  },1200);
 }
 
 function switchSource(side,mode){
